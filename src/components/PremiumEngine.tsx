@@ -29,33 +29,30 @@ export default function PremiumEngine({ story }: PremiumEngineProps) {
     choiceHistory: [],
   });
 
-  // const [nodeHistory, setNodeHistory] = useState<string[]>([story.startNodeId]);
-  
-  // const handleGoBack = useCallback(() => {
-  //   if (nodeHistory.length > 1) {
-  //     const newHistory = [...nodeHistory];
-  //     newHistory.pop(); // Remove current node
-  //     const previousNodeId = newHistory[newHistory.length - 1];
-      
-  //     setNodeHistory(newHistory);
-  //     setGameState(prev => ({
-  //       ...prev,
-  //       currentNodeId: previousNodeId,
-  //     }));
-  //     setIsTypingComplete(false);
-  //     setSelectedChoice(null);
-  //   }
-  // }, [nodeHistory]);
-  
-  // const canGoBack = nodeHistory.length > 1 && !gameState.isTransitioning;
-
-
-  // UI state
+  const [nodeHistory, setNodeHistory] = useState<string[]>([story.startNodeId]);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState<Choice | null>(null);
   const [sceneIndex, setSceneIndex] = useState(0);
   const [showTransition, setShowTransition] = useState(false);
   const [showCinematicEnding, setShowCinematicEnding] = useState(false);
+
+  const handleGoBack = useCallback(() => {
+    if (nodeHistory.length > 1) {
+      const newHistory = [...nodeHistory];
+      newHistory.pop(); // Remove current node
+      const previousNodeId = newHistory[newHistory.length - 1];
+      
+      setNodeHistory(newHistory);
+      setGameState(prev => ({
+        ...prev,
+        currentNodeId: previousNodeId,
+      }));
+      setIsTypingComplete(false);
+      setSelectedChoice(null);
+    }
+  }, [nodeHistory]);
+  
+  const canGoBack = nodeHistory.length > 1 && !gameState.isTransitioning;
 
   // Current node
   const currentNode: StoryNode = story.nodes[gameState.currentNodeId];
