@@ -29,6 +29,27 @@ export default function PremiumEngine({ story }: PremiumEngineProps) {
     choiceHistory: [],
   });
 
+  // const [nodeHistory, setNodeHistory] = useState<string[]>([story.startNodeId]);
+  
+  // const handleGoBack = useCallback(() => {
+  //   if (nodeHistory.length > 1) {
+  //     const newHistory = [...nodeHistory];
+  //     newHistory.pop(); // Remove current node
+  //     const previousNodeId = newHistory[newHistory.length - 1];
+      
+  //     setNodeHistory(newHistory);
+  //     setGameState(prev => ({
+  //       ...prev,
+  //       currentNodeId: previousNodeId,
+  //     }));
+  //     setIsTypingComplete(false);
+  //     setSelectedChoice(null);
+  //   }
+  // }, [nodeHistory]);
+  
+  // const canGoBack = nodeHistory.length > 1 && !gameState.isTransitioning;
+
+
   // UI state
   const [isTypingComplete, setIsTypingComplete] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState<Choice | null>(null);
@@ -112,6 +133,9 @@ export default function PremiumEngine({ story }: PremiumEngineProps) {
     const nextNodeId = pendingNodeRef.current;
     if (!nextNodeId) return;
 
+    // Add to node history for back button
+    setNodeHistory(prev => [...prev, nextNodeId]);
+
     setGameState(prev => ({
       ...prev,
       currentNodeId: nextNodeId,
@@ -139,6 +163,7 @@ export default function PremiumEngine({ story }: PremiumEngineProps) {
       uiVisible: true,
       choiceHistory: [],
     });
+    setNodeHistory([story.startNodeId]); // Reset history on restart
     setShowCinematicEnding(false);
     setIsTypingComplete(false);
     setSelectedChoice(null);
@@ -170,8 +195,8 @@ export default function PremiumEngine({ story }: PremiumEngineProps) {
               key={i}
               className="absolute rounded-full bg-white/5"
               style={{
-                width: (i % 4) + 2,
-                height: (i % 4) + 2,
+                width: (i % 5) + 2,
+                height: (i % 5) + 2,
                 left: `${(i * 13) % 100}%`,
                 top: `${(i * 19) % 100}%`,
                 animation: `float ${15 + (i % 10)}s linear infinite`,
@@ -202,6 +227,20 @@ export default function PremiumEngine({ story }: PremiumEngineProps) {
           onTypingComplete={handleTypingComplete}
           storyTitle={story.title}
         />
+      )}
+
+      {/* BACK BUTTON UI - Top-left corner */}
+      {canGoBack && !showCinematicEnding && (
+        <button
+          onClick={handleGoBack}
+          className="absolute top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 
+                     rounded-full bg-white/10 backdrop-blur-sm border border-white/20
+                     text-white/70 hover:text-white hover:bg-white/20 
+                     transition-all duration-300 group"
+        >
+          <span className="transform group-hover:-translate-x-1 transition-transform">←</span>
+          <span className="text-sm tracking-wide">Back</span>
+        </button>
       )}
 
       {/* Cinematic Ending - movie-style credits with statistics */}

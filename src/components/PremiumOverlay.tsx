@@ -72,7 +72,7 @@ export default function PremiumOverlay({
 
             {/* Content container */}
             <motion.div
-              className="relative max-w-4xl mx-auto px-8 md:px-12 py-8"
+              className="relative w-4xl mx-auto px-8 md:px-12 py-8"
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -157,25 +157,8 @@ export default function PremiumOverlay({
                             border: '1px solid rgba(255,255,255,0.1)',
                           }}
                         >
-                          <motion.div
-                            className="text-6xl md:text-7xl font-bold mb-3"
-                            style={{
-                              background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #a855f7 100%)',
-                              WebkitBackgroundClip: 'text',
-                              WebkitTextFillColor: 'transparent',
-                              textShadow: '0 0 40px rgba(168, 85, 247, 0.4)',
-                            }}
-                            initial={{ scale: 0.5 }}
-                            animate={{ scale: 1 }}
-                            transition={{ type: 'spring', delay: 1.4 }}
-                          >
-                            {node.statistic.value}
-                          </motion.div>
                           <p className="text-white/80 text-lg mb-3 leading-relaxed">
-                            {node.statistic.description}
-                          </p>
-                          <p className="text-white/40 text-sm">
-                            — {node.statistic.source}
+                            {node.statistic}
                           </p>
                         </div>
                       </motion.div>
